@@ -1,0 +1,5 @@
+server:irc.server.net
+port:6667
+channel:#channel
+nick:basic_moderation_bot
+realname:realname
