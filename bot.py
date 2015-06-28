@@ -18,17 +18,18 @@ class Bot(ircbot.SingleServerIRCBot):
 		global channel
 		
 		# Badwords...
-		global kick_messages
+		global kick_messages_badword
+		global kick_messages_flood
 		badwords = open("badwords.txt")
 		message = ev.arguments()[0]
 		for line in badwords :
 			if re.match("((.)* ){,1}"+line[:-1]+" (.)*", message.lower()) != None or line[:-1] in message.lower().split() or re.match("((.)* ){,1}"+line[:-1]+"\W", message.lower()) != None : # If we find the WORD in the message
-				serv.kick(channel, irclib.nm_to_n(ev.source()), kick_messages[random.randint(0, len(kick_messages)-1)])
+				serv.kick(channel, irclib.nm_to_n(ev.source()), kick_messages_badword[random.randint(0, len(kick_messages_badword)-1)])
 		badwords.close()
 		
 		# And flood...
 		if len(message) > 350 :
-			serv.kick(channel, irclib.nm_to_n(ev.source()), "PLEASE DO NOT FLOOD !!!!!")
+			serv.kick(channel, irclib.nm_to_n(ev.source()), kick_messages_flood[random.randint(0, len(kick_messages_flood)-1)])
 
 
 config = open("config.txt", "r")
@@ -64,11 +65,17 @@ for line in config :
 		quit()
 config.close()
 
-# Open kick_messages.txt and create a list of kick messages
-kick_messages_file = open("kick_messages.txt", "r")
-kick_messages = []
+# Open kick_messages_badword.txt and create a list of kick messages
+kick_messages_file = open("kick_messages_badword.txt", "r")
+kick_messages_badword = []
 for line in kick_messages_file :
-	kick_messages.append(line)
+	kick_messages_badword.append(line)
+kick_messages_file.close()
+# Open kick_messages_flood.txt and create a list of kick messages
+kick_messages_file = open("kick_messages_flood.txt", "r")
+kick_messages_flood = []
+for line in kick_messages_file :
+	kick_messages_flood.append(line)
 kick_messages_file.close()
  
 if __name__ == "__main__":
